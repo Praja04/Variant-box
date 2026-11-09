@@ -1,0 +1,148 @@
+import json
+
+notebook_content = {
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Pallet Variant & Stack Detection - YOLO Model Training (Google Colab)\n",
+    "Notebook ini khusus digunakan untuk melatih model YOLOv8 pada GPU Cloud Google Colab.\n",
+    "\n",
+    "### Langkah Penggunaan:\n",
+    "1. **Pastikan GPU Aktif**: Klik menu `Runtime` -> `Change runtime type` -> Pilih `T4 GPU` -> `Save`.\n",
+    "2. **Upload Dataset**: Upload file `dataset_for_colab.zip` ke Google Drive atau langsung ke panel file sebelah kiri Colab.\n",
+    "3. **Jalankan Semua Cell**: Klik menu `Runtime` -> `Run all` (Ctrl + F9)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 1. Cek Akses GPU T4"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!nvidia-smi"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 2. Install Ultralytics (YOLO)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!pip install -q ultralytics"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 3. Extract Dataset (`dataset_for_colab.zip`)\n",
+    "Upload file dataset_for_colab.zip ke panel file Colab di sebelah kiri."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "import zipfile\n",
+    "\n",
+    "zip_file_path = '/content/dataset_for_colab.zip'\n",
+    "if not os.path.exists(zip_file_path):\n",
+    "    zip_file_path = '/content/drive/MyDrive/dataset_for_colab.zip'\n",
+    "\n",
+    "if os.path.exists(zip_file_path):\n",
+    "    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:\n",
+    "        zip_ref.extractall('/content/dataset')\n",
+    "    print('Dataset berhasil di-extract ke /content/dataset!')\n",
+    "else:\n",
+    "    print('File dataset_for_colab.zip tidak ditemukan! Tolong upload file tersebut terlebih dahulu.')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 4. Mulai Training AI (YOLOv8)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ultralytics import YOLO\n",
+    "\n",
+    "# Load pretrained YOLOv8 nano model\n",
+    "model = YOLO('yolov8n.pt')\n",
+    "\n",
+    "# Mulai training dengan GPU Colab\n",
+    "results = model.train(\n",
+    "    data='/content/dataset/data.yaml',\n",
+    "    epochs=100,\n",
+    "    imgsz=640,\n",
+    "    batch=16,\n",
+    "    device=0,\n",
+    "    project='pallet_colab_run',\n",
+    "    name='variant_classifier_v3',\n",
+    "    exist_ok=True\n",
+    ")\n",
+    "print('Training Selesai!')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 5. Download Model Hasil Training (`best.pt`)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from google.colab import files\n",
+    "import os\n",
+    "\n",
+    "best_model_path = '/content/pallet_colab_run/variant_classifier_v3/weights/best.pt'\n",
+    "if os.path.exists(best_model_path):\n",
+    "    files.download(best_model_path)\n",
+    "    print('Menyiapkan download best.pt...')\n",
+    "else:\n",
+    "    print('File best.pt belum ditemukan!')"
+   ]
+  }
+ ],
+ "metadata": {
+  "language_info": {
+   "name": "python"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+
+with open(r"c:\Program-Bas\esp32cam\project\codes\Train_Pallet_YOLO_Colab.ipynb", "w", encoding="utf-8") as f:
+    json.dump(notebook_content, f, indent=2)
+
+print("Created Train_Pallet_YOLO_Colab.ipynb successfully")

@@ -1,0 +1,61 @@
+# ========================================================
+# .gitignore — Pallet Variant Detection Project
+# ========================================================
+
+# ── Datasets & Large Archives (JANGAN di-push ke GitHub) ──
+codes/dataset/
+codes/datasets/
+dataset/
+datasets/
+dataset_metadata.json
+*.zip
+*.tar.gz
+*.rar
+*.7z
+dataset_for_colab.zip
+codes/dataset_for_colab.zip
+
+# ── Folder Arsip File Lama / Non-Pallet ──
+legacy_non_pallet/
+
+# ── Output Logs, Excel, & Screenshot Deteksi ──
+codes/output/
+output/
+*.xlsx
+*.csv
+
+# ── Training Runs & Batch Images ──
+runs/
+codes/pallet/runs/
+
+# ── YOLO Model Weights (Binaries) ──
+*.pt
+*.onnx
+*.engine
+*.tflite
+yolov8n.pt
+yolo26n.pt
+fire_*.pt
+
+# ── Python Cache & Virtual Environments ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+venv/
+.venv/
+env/
+.env
+
+# ── Log & Temp ──
+*.log
+*.tmp
+*.bak
+*.swp
+
+# ── OS & IDE ──
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
